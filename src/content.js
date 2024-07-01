@@ -20,7 +20,6 @@ function filterRecommendations(allowedChannels) {
 
                 if (!allowedChannels.includes(channelName)) {
                     video.style.display = 'none';
-                    console.log(`Hiding video from channel: ${channelName}`);
                 }
             }
         });
@@ -38,38 +37,31 @@ function checkCurrentVideoChannel(allowedChannels) {
         const videoPlayer = document.querySelector('.html5-video-player');
         if (videoPlayer) {
             videoPlayer.style.display = 'none';
-            console.log(`Hiding current video from channel: ${videoChannelName}`);
         }
     }
 }
 
 // Fetch allowed channels and the extension enabled state from storage and filter recommendations and current video
 chrome.storage.sync.get(['allowedChannels', 'isExtensionEnabled'], function(data) {
-    const allowedChannels = data.allowedChannels || [];
     const isExtensionEnabled = data.isExtensionEnabled !== undefined ? data.isExtensionEnabled : true;
+    if(!isExtensionEnabled)
+        return;
 
-    if (isExtensionEnabled) {
-        console.log('Extension is enabled.');
-        filterRecommendations(allowedChannels);
-        checkCurrentVideoChannel(allowedChannels);
-    } else {
-        console.log('Extension is disabled.');
-    }
+    const allowedChannels = data.allowedChannels || [];
+    filterRecommendations(allowedChannels);
+    checkCurrentVideoChannel(allowedChannels);
 });
 
 // Observe changes to the recommended sections and the current video
 const observer = new MutationObserver(function() {
     chrome.storage.sync.get(['allowedChannels', 'isExtensionEnabled'], function(data) {
-        const allowedChannels = data.allowedChannels || [];
         const isExtensionEnabled = data.isExtensionEnabled !== undefined ? data.isExtensionEnabled : true;
+        if (!isExtensionEnabled)
+            return;
 
-        if (isExtensionEnabled) {
-            console.log('Extension is enabled (observer).');
-            filterRecommendations(allowedChannels);
-            checkCurrentVideoChannel(allowedChannels);
-        } else {
-            console.log('Extension is disabled (observer).');
-        }
+        const allowedChannels = data.allowedChannels || [];
+        filterRecommendations(allowedChannels);
+        checkCurrentVideoChannel(allowedChannels);
     });
 });
 
@@ -85,15 +77,12 @@ if (targetNode) {
 // Initial filtering and current video check
 document.addEventListener('DOMContentLoaded', function() {
     chrome.storage.sync.get(['allowedChannels', 'isExtensionEnabled'], function(data) {
-        const allowedChannels = data.allowedChannels || [];
         const isExtensionEnabled = data.isExtensionEnabled !== undefined ? data.isExtensionEnabled : true;
+        if(!isExtensionEnabled)
+            return;
 
-        if (isExtensionEnabled) {
-            console.log('Extension is enabled (DOMContentLoaded).');
-            filterRecommendations(allowedChannels);
-            checkCurrentVideoChannel(allowedChannels);
-        } else {
-            console.log('Extension is disabled (DOMContentLoaded).');
-        }
+        const allowedChannels = data.allowedChannels || [];
+        filterRecommendations(allowedChannels);
+        checkCurrentVideoChannel(allowedChannels);
     });
 });
