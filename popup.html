@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube Channel Filter</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    input { margin: 5px; }
+    button { margin: 5px; }
+    .slider-container { display: flex; align-items: center; margin: 10px 0; }
+    .slider-container label { margin-right: 10px; }
+  </style>
+</head>
+<body>
+  <h1>YouTube Channel Filter</h1>
+  <div class="slider-container">
+    <label for="extensionToggle">Enable Filter:</label>
+    <input type="checkbox" id="extensionToggle">
+  </div>
+  <input id="channelInput" type="text" placeholder="Channel Name">
+  <button id="addChannel">Add Channel</button>
+  <ul id="channelList"></ul>
+  <script src="popup.js"></script>
+</body>
+</html>
